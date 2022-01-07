@@ -1,6 +1,7 @@
 package com.example.safetravels.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.example.safetravels.MainActivity
+import com.example.safetravels.MapsActivity
 import com.example.safetravels.databinding.ActivityLoginBinding
 
 import com.example.safetravels.R
@@ -20,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,10 +96,15 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
+                openActivity1()
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+    private fun openActivity1(){
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {

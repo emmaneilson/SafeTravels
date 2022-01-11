@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.example.safetravels.databinding.ActivityMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.example.safetravels.databinding.ActivityMainBinding
+
 import java.util.jar.Manifest
 import android.widget.TextView
 import java.text.SimpleDateFormat

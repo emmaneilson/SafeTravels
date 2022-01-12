@@ -40,6 +40,7 @@ class ContactsActivity : AppCompatActivity() {
             for (i in contactArray) {
                 stringTextView.setText(i);
             }
+        }
             navView = findViewById(R.id.nav_menu)
 
             navView.setNavigationItemSelectedListener { menuItem ->
@@ -70,7 +71,7 @@ class ContactsActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+
 
     private fun openHome() {
         val intent = Intent(this, MainActivity::class.java)

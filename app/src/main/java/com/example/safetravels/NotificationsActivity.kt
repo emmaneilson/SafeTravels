@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 
+
 class NotificationsActivity : AppCompatActivity() {
 
     private lateinit var navView: NavigationView
@@ -63,4 +64,5 @@ class NotificationsActivity : AppCompatActivity() {
         val intent = Intent(this, NotificationsActivity::class.java)
         startActivity(intent)
     }
+
 }

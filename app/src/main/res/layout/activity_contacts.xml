@@ -76,6 +76,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
+        <!--title-->
         <TextView
             android:id="@+id/contacts_text"
             android:layout_width="wrap_content"
@@ -89,6 +90,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--subtitle-->
         <TextView
             android:id="@+id/editEmergency"
             android:layout_width="wrap_content"
@@ -101,26 +103,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/contacts_text" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="181dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.printallelementsofarraylist_android_examples.com.MainActivity" >
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="54dp"
-            android:text="@string/add_contact_text"
-            android:textAllCaps="false"
-            app:cornerRadius="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editEmergency"
-            tools:ignore="TextContrastCheck" />
+            <TextView android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="168dp"
+                android:textSize="16sp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:gravity="center" />
 
+
+            <!--input name, number-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addContact"
+                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_marginStart="25dp"/>
+
+            <!--submit-->
+            <Button
+                android:id="@+id/subContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:layout_marginStart="25dp"/>
+
+        </LinearLayout>
+
+        <!--emergency button-->
         <Button
             android:id="@+id/random_button"
             android:layout_width="153dp"

@@ -36,7 +36,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context="com.printallelementsofarraylist_android_examples.com.MainActivity" >
+
+        <TextView android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="168dp"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center" />
+
 
         <!--input name, number-->
         <com.google.android.material.textfield.TextInputEditText

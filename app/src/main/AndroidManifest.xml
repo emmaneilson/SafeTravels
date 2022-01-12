@@ -18,10 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeTravels">
         <activity
-            android:name=".NotifcationsActivity"
+            android:name=".ContactsActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactsActivity"
+            android:name=".NotificationsActivity"
             android:exported="false" />
         <activity
             android:name=".MapsActivity"
@@ -37,6 +37,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".MainActivity"

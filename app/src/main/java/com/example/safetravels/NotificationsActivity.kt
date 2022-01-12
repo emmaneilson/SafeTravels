@@ -4,43 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.drawerlayout.widget.DrawerLayout
-import com.example.safetravels.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
+class NotificationsActivity : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var actionBarToggle: ActionBarDrawerToggle
     private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_notifcations)
 
         supportActionBar?.hide()
-        //setSupportActionBar(binding.mainToolbar)
 
-        setContentView(binding.root)
-
-        // Call findViewById on the DrawerLayout
-        drawerLayout = findViewById(R.id.drawerLayout)
-
-        // Pass the ActionBarToggle action into the drawerListener
-        actionBarToggle = ActionBarDrawerToggle(this, drawerLayout, 0, 0)
-        drawerLayout.addDrawerListener(actionBarToggle)
-
-        // Display the hamburger icon to launch the drawer
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // Call syncState() on the action bar so it'll automatically change to the back button when the drawer layout is open
-        actionBarToggle.syncState()
-
-        // Call findViewById on the NavigationView
         navView = findViewById(R.id.nav_menu)
 
         navView.setNavigationItemSelectedListener { menuItem ->

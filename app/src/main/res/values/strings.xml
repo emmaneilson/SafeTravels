@@ -16,4 +16,8 @@
     <string name="add_contact_text">Add Contact</string>
     <string name="edit_notification_text">Edit Notification Settings</string>
     <string name="notifications_text">Notifications</string>
+    <string name="menu_icon">menu icon</string>
+    <string name="header_logo_description">header logo</string>
+    <string name="home_text">Home</string>
+    <string name="map_text">Map</string>
 </resources>

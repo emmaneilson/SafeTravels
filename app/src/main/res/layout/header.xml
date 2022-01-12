@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/main_colour"
+    android:gravity="bottom"
+    >
+
+    <ImageView
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="25dp"
+        android:src="@drawable/safetravelslogo"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:fontFamily="@font/josefin_sans_bold"
+        android:textColor="@android:color/white"
+        android:textSize="32sp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="25dp"/>
+</LinearLayout>

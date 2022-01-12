@@ -2,6 +2,7 @@ package com.example.safetravels
 
 import android.content.ContentProviderClient
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.location.LocationRequest
@@ -25,6 +26,10 @@ import com.example.safetravels.databinding.ActivityMainBinding
 
 import java.util.jar.Manifest
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,10 +41,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var PERMISSION_ID = 1234
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     //lateinit var locationRequest: LocationRequest
+    private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.hide()
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -54,6 +61,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         getLastLocation()
+
+        navView = findViewById(R.id.nav_menu)
+
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+                    openHome()
+                    true
+                }
+                R.id.nav_map-> {
+                    Toast.makeText(this, "Map", Toast.LENGTH_SHORT).show()
+                    openMap()
+                    true
+                }
+                R.id.nav_contacts -> {
+                    Toast.makeText(this, "Contacts", Toast.LENGTH_SHORT).show()
+                    openContacts()
+                    true
+                }
+                R.id.nav_notifications -> {
+                    Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
+                    openNotifications()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
     }
 
     private fun getLastLocation(){
@@ -128,5 +165,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 getLastLocation()
             }
         }
+    }
+    private fun openHome(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+    private fun openMap(){
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
+    }
+    private fun openContacts(){
+        val intent = Intent(this, ContactsActivity::class.java)
+        startActivity(intent)
+    }
+    private fun openNotifications(){
+        val intent = Intent(this, NotificationsActivity::class.java)
+        startActivity(intent)
     }
 }

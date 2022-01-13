@@ -3,38 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.346875" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.346875" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.346875" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/drawable/ic_launcher_background.xml" value="0.346875" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/activity_contacts.xml" value="0.3307291666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/activity_main.xml" value="0.3307291666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/activity_maps.xml" value="0.3307291666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/activity_notifcations.xml" value="0.3307291666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/header.xml" value="0.5541666666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/layout/toolbar.xml" value="0.5541666666666667" />
-        <entry key="..\:/School/SE4450/SafeTravels/app/src/main/res/menu/main_menu.xml" value="0.3307291666666667" />
-        <entry key="..\:/Users/ellio/Desktop/school/eng/SafeTravels/app/src/main/res/layout/activity_contacts.xml" value="0.10344827586206896" />
+        <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/layout/activity_contacts.xml" value="0.1" />
         <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/layout/activity_login.xml" value="0.11" />
-        <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/layout/activity_main.xml" value="0.10009057971014493" />
+        <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/layout/activity_main.xml" value="0.11" />
+        <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/layout/activity_maps.xml" value="0.1" />
         <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1953125" />
         <entry key="..\:/Users/emman/AndroidStudioProjects/SafeTravels/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1953125" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26145833333333335" />
-        <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.140625" />
-        <entry key="app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.26145833333333335" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.26145833333333335" />
-        <entry key="app/src/main/res/drawable/rounded_corner.xml" value="0.26145833333333335" />
-        <entry key="app/src/main/res/layout/activity_contacts.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_contacts2.xml" value="0.23125" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2453125" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_nav.xml" value="0.2453125" />
-        <entry key="app/src/main/res/layout/activity_notifcations.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/header.xml" value="0.2453125" />
-        <entry key="app/src/main/res/layout/toolbar.xml" value="0.2453125" />
-        <entry key="app/src/main/res/menu/main_menu.xml" value="0.2453125" />
-        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.140625" />
       </map>
     </option>
   </component>

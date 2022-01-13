@@ -4,6 +4,7 @@ import android.content.ContentProviderClient
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
 import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.android.gms.maps.model.CircleOptions
+
+
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -126,8 +131,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.addMarker(MarkerOptions().position(userPos).title("User Current Location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos))
+        mMap.addCircle(
+            CircleOptions()
+                .center(userPos)
+                .radius(10.0)
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.BLUE)
+        )
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
     }
 
     private fun checkPermission():Boolean{

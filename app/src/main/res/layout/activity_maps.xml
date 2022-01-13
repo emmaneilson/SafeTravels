@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,9 +19,9 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -35,10 +34,10 @@
                     android:background="?attr/colorPrimary"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme"
-                    map:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    map:layout_constraintEnd_toEndOf="parent"
-                    map:layout_constraintStart_toStartOf="parent"
-                    map:layout_constraintTop_toTopOf="parent" />
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/header_logo"
@@ -46,12 +45,12 @@
                     android:layout_height="60dp"
                     android:layout_marginEnd="25dp"
                     android:contentDescription="@string/header_logo_description"
-                    map:layout_constraintBottom_toBottomOf="@+id/mainToolbar"
-                    map:layout_constraintEnd_toEndOf="parent"
-                    map:layout_constraintHorizontal_bias="0.42"
-                    map:layout_constraintStart_toStartOf="@+id/mainToolbar"
-                    map:layout_constraintTop_toTopOf="parent"
-                    map:srcCompat="@drawable/safetravelslogo" />
+                    app:layout_constraintBottom_toBottomOf="@+id/mainToolbar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.42"
+                    app:layout_constraintStart_toStartOf="@+id/mainToolbar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/safetravelslogo" />
 
                 <TextView
                     android:id="@+id/toolbar_name"
@@ -63,9 +62,9 @@
                     android:textColor="@android:color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
-                    map:layout_constraintBottom_toBottomOf="parent"
-                    map:layout_constraintStart_toEndOf="@+id/header_logo"
-                    map:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/header_logo"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -73,11 +72,11 @@
                     android:layout_height="35dp"
                     android:layout_marginStart="25dp"
                     android:contentDescription="@string/menu_icon"
-                    map:layout_constraintBottom_toBottomOf="parent"
-                    map:layout_constraintStart_toStartOf="parent"
-                    map:layout_constraintTop_toTopOf="parent"
-                    map:srcCompat="@drawable/ic_baseline_menu_24"
-                    map:tint="@android:color/white" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_menu_24"
+                    app:tint="@android:color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -88,12 +87,12 @@
             android:layout_height="match_parent"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintHorizontal_bias="0.0"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent"
-            map:layout_constraintVertical_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:context=".MapsActivity"
             tools:layout="@layout/activity_main" />
 
@@ -109,25 +108,28 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textAllCaps="false"
-            map:backgroundTint="@color/alertButton"
-            map:cornerRadius="20dp"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
+            app:backgroundTint="@color/alertButton"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/Time"
+            android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:textAlignment="center"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.148"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.103" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_menu"

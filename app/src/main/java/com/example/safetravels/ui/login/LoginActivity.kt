@@ -103,8 +103,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     private fun openActivity1(){
-//        val intent = Intent(this, MapsActivity::class.java)
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, MapsActivity::class.java)
+        //val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 

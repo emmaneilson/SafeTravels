@@ -103,7 +103,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.103" />
-
         <!--temporary: timer length (move to settings page)-->
         <TextView
             android:id="@+id/Length"
@@ -121,7 +120,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.103" />
-
         <!--temporary: start timer (move to start route)-->
         <Button
             android:id="@+id/startbutton"
@@ -130,7 +128,6 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="50dp"
             android:layout_centerInParent="true"
-            android:onClick="startTimeCounter"
             android:text="Start Timer"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="parent"
@@ -167,8 +164,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="MissingConstraints" />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

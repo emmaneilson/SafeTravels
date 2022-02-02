@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
 import android.os.CountDownTimer
+import android.widget.Button
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 
@@ -61,12 +62,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // clock
-//        val textView: TextView = findViewById(R.id.Time)
-//        val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
-//        val currentDateAndTime: String = simpleDateFormat.format(Date())
-//        textView.text = currentDateAndTime
-        
+        // set onclick method to button (temporary, timer will start from route)
+        val button = findViewById<Button>(R.id.startbutton)
+        button.setOnClickListener {
+            ButtClick()
+        }
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -128,15 +129,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     // start & display timer
-    fun startTimeCounter(view: View) {
-
+    private fun ButtClick() {
 
         // get timer length and start timer
         object : CountDownTimer(R.id.Length.toLong(), 1000000) {
 
-            // update display time
+            // update & display time
             val countTime: TextView = findViewById(R.id.Time)
             override fun onTick(millisUntilFinished: Long) {
 
@@ -145,13 +144,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 countTime.text = counter.toString()
 
                 // ongoing checkins
-                if(counter>R.id.Length){onQuarter()}// 1/4
-                if(counter>R.id.Length){onHalfway()}// 1/2
-                if(counter>R.id.Length){onTQuarter()}// 3/4
+                if(counter>R.id.Length/4){onQuarter()}// 1/4
+                if(counter>R.id.Length/2){onHalfway()}// 1/2
+                if(counter>R.id.Length*3/4){onTQuarter()}// 3/4
 
             }
 
-            // ongoing checkins
+            // ongoing checkins (todo next sprint)
             fun onQuarter() {
                 countTime.text = "One quarter"
             }

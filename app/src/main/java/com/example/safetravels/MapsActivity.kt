@@ -35,14 +35,8 @@ import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
-<<<<<<< HEAD
 import android.os.CountDownTimer
-=======
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-
-
-
->>>>>>> 3b16469130652b4c6e9b11ca21235ac3335bf2eb
 
 
 

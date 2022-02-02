@@ -30,11 +30,19 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener
 import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
+<<<<<<< HEAD
 import android.os.CountDownTimer
+=======
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
+
+
+>>>>>>> 3b16469130652b4c6e9b11ca21235ac3335bf2eb
 
 
 
@@ -42,6 +50,7 @@ import android.os.CountDownTimer
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private val markerPoints = ArrayList<Any>()
     private lateinit var binding: ActivityMapsBinding
     private var userPos = LatLng(-200.0, 151.0)
     private var PERMISSION_ID = 1234
@@ -178,6 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap = googleMap
 
+
         mMap.addCircle(
             CircleOptions()
                 .center(userPos)
@@ -186,6 +196,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .fillColor(Color.BLUE)
         )
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
+        mMap.setOnMapClickListener { latLng ->
+            if (markerPoints.size > 1) {
+                markerPoints.clear()
+                mMap.clear()
+            }
+
+            // Adding new item to the ArrayList
+            markerPoints.add(latLng)
+
+            // Creating MarkerOptions
+            val options = MarkerOptions()
+
+            // Setting the position of the marker
+            options.position(latLng)
+            if (markerPoints.size === 1) {
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            } else if (markerPoints.size === 2) {
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            }
+
+            // Add new marker to the Google Map Android API V2
+            mMap.addMarker(options)
+
+            // Checks, whether start and end locations are captured
+            if (markerPoints.size >= 2) {
+                val origin = markerPoints.get(0) as LatLng
+                val dest = markerPoints.get(1) as LatLng
+
+                // Getting URL to the Google Directions API
+                //val url: String = getDirectionsUrl(origin, dest)
+                //val downloadTask = DownloadTask()
+
+                // Start downloading json data from Google Directions API
+                //downloadTask.execute(url)
+            }
+        }
     }
 
     // permissions
@@ -240,4 +286,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val intent = Intent(this, NotificationsActivity::class.java)
         startActivity(intent)
     }
+
 }

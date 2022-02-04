@@ -36,7 +36,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
 import android.os.CountDownTimer
+import android.view.Gravity
 import android.widget.Button
+import android.widget.ImageView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 
@@ -51,6 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var PERMISSION_ID = 1234
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var navView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
     var counter = 0
     //lateinit var locationRequest: LocationRequest
 
@@ -61,6 +64,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        drawerLayout = findViewById(R.id.drawerLayout)
 
         // set onclick method to button (temporary, timer will start from route)
         val button = findViewById<Button>(R.id.startbutton)
@@ -104,6 +109,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     false
                 }
             }
+        }
+
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
+
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.LEFT)
         }
     }
 

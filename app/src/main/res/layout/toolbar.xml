@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/menu_icon"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:contentDescription="@string/menu_icon"

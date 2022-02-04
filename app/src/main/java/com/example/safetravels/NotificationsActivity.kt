@@ -7,17 +7,21 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import android.widget.Switch
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.drawerlayout.widget.DrawerLayout
 
 
 class NotificationsActivity : AppCompatActivity() {
     private lateinit var toggleNotification: Switch
     private lateinit var navView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +32,8 @@ class NotificationsActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         navView = findViewById(R.id.nav_menu)
+        drawerLayout = findViewById(R.id.drawerLayout)
+
         toggleNotification = findViewById(R.id.notification1)
         toggleNotification.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -87,6 +93,12 @@ class NotificationsActivity : AppCompatActivity() {
                     false
                 }
             }
+        }
+
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
+
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.LEFT)
         }
     }
 

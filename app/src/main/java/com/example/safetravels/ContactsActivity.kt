@@ -10,10 +10,14 @@ import android.widget.TextView
 import java.util.ArrayList
 import java.util.List
 import android.app.Activity
+import android.view.Gravity
+import android.widget.ImageView
+import androidx.drawerlayout.widget.DrawerLayout
 
 class ContactsActivity : AppCompatActivity() {
 
     private lateinit var navView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
 
     // contact array
     val contactArray = arrayListOf<String>();
@@ -41,36 +45,45 @@ class ContactsActivity : AppCompatActivity() {
                 stringTextView.setText(i);
             }
         }
-            navView = findViewById(R.id.nav_menu)
 
-            navView.setNavigationItemSelectedListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.nav_home -> {
-                        Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-                        openHome()
-                        true
-                    }
-                    R.id.nav_map -> {
-                        Toast.makeText(this, "Map", Toast.LENGTH_SHORT).show()
-                        openMap()
-                        true
-                    }
-                    R.id.nav_contacts -> {
-                        Toast.makeText(this, "Contacts", Toast.LENGTH_SHORT).show()
-                        openContacts()
-                        true
-                    }
-                    R.id.nav_notifications -> {
-                        Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
-                        openNotifications()
-                        true
-                    }
-                    else -> {
-                        false
-                    }
+        navView = findViewById(R.id.nav_menu)
+        drawerLayout = findViewById(R.id.drawerLayout)
+
+
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+                    openHome()
+                    true
+                }
+                R.id.nav_map -> {
+                    Toast.makeText(this, "Map", Toast.LENGTH_SHORT).show()
+                    openMap()
+                    true
+                }
+                R.id.nav_contacts -> {
+                    Toast.makeText(this, "Contacts", Toast.LENGTH_SHORT).show()
+                    openContacts()
+                    true
+                }
+                R.id.nav_notifications -> {
+                    Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
+                    openNotifications()
+                    true
+                }
+                else -> {
+                    false
                 }
             }
         }
+
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
+
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.LEFT)
+        }
+    }
 
 
     private fun openHome() {

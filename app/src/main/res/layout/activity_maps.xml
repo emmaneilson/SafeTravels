@@ -7,15 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <!--main app-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:fontFamily="sans-serif"
         android:fitsSystemWindows="true"
         android:id="@+id/dashboard"
         tools:openDrawer="start"
         tools:context=".MainActivity">
 
+        <!--header-->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,10 +71,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/menu_icon"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="25dp"
+                    android:clickable="true"
                     android:contentDescription="@string/menu_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -82,38 +87,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:context=".MapsActivity"
-            tools:layout="@layout/activity_main" />
-
-        <Button
-            android:id="@+id/random_button"
-            android:layout_width="153dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="50dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/send_alert"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            app:backgroundTint="@color/alertButton"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints" />
-
+        <!--timer-->
         <TextView
             android:id="@+id/Time"
             android:background="@color/white"
@@ -130,7 +104,71 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.103" />
+        <!--temporary: timer length (move to settings page)-->
+        <TextView
+            android:id="@+id/Length"
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.148"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.103" />
+        <!--temporary: start timer (move to start route)-->
+        <Button
+            android:id="@+id/startbutton"
+            android:layout_width="153dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
+            android:layout_centerInParent="true"
+            android:text="Start Timer"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"/>
+
+        <!--map-->
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:context=".MapsActivity"
+            tools:layout="@layout/activity_main" />
+
+        <!--emergency button-->
+        <Button
+            android:id="@+id/random_button"
+            android:layout_width="153dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="50dp"
+            android:text="@string/send_alert"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/alertButton"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--navigation menu-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_menu"
         android:layout_width="wrap_content"
@@ -141,4 +179,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -22,10 +22,19 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 import android.widget.TextView
+import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener
 import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
+import android.os.CountDownTimer
+import android.view.Gravity
+import android.widget.Button
+import android.widget.ImageView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.os.AsyncTask
 import java.io.BufferedReader
@@ -40,9 +49,6 @@ import com.google.android.gms.maps.model.PolylineOptions
 import org.json.JSONObject
 
 
-
-
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -51,9 +57,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var userPos = LatLng(-200.0, 151.0)
     private var PERMISSION_ID = 1234
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    //lateinit var locationRequest: LocationRequest
     private lateinit var navView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
+    var counter = 0
+    //lateinit var locationRequest: LocationRequest
 
+    // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,10 +70,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val textView: TextView = findViewById(R.id.Time)
-        val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
-        val currentDateAndTime: String = simpleDateFormat.format(Date())
-        textView.text = currentDateAndTime
+        drawerLayout = findViewById(R.id.drawerLayout)
+
+        // set onclick method to button (temporary, timer will start from route)
+        val button = findViewById<Button>(R.id.startbutton)
+        button.setOnClickListener {
+            ButtClick()
+        }
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -102,8 +115,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
+
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.LEFT)
+        }
     }
 
+    // get last known location
     private fun getLastLocation(){
         if(checkPermission()){
             if(isLocationEnabled()){
@@ -125,16 +145,55 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    // start & display timer
+    private fun ButtClick() {
+
+        // get timer length and start timer
+        object : CountDownTimer(R.id.Length.toLong(), 1000000) {
+
+            // update & display time
+            val countTime: TextView = findViewById(R.id.Time)
+            override fun onTick(millisUntilFinished: Long) {
+
+                // update timer and update display
+                counter++
+                countTime.text = counter.toString()
+
+                // ongoing checkins
+                if(counter>R.id.Length/4){onQuarter()}// 1/4
+                if(counter>R.id.Length/2){onHalfway()}// 1/2
+                if(counter>R.id.Length*3/4){onTQuarter()}// 3/4
+
+            }
+
+            // ongoing checkins (todo next sprint)
+            fun onQuarter() {
+                countTime.text = "One quarter"
+            }
+            fun onHalfway() {
+                countTime.text = "Halfway"
+            }
+            fun onTQuarter() {
+                countTime.text = "Three Quarters"
+            }
+            override fun onFinish() {
+                countTime.text = "Finished"
+            }
+        }.start()
+    }
+
+    // start map
     override fun onMapReady(googleMap: GoogleMap) {
+        /**
+         * Manipulates the map once available.
+         * This callback is triggered when the map is ready to be used.
+         * This is where we can add markers or lines, add listeners or move the camera. In this case,
+         * we just add a marker near Sydney, Australia.
+         * If Google Play services is not installed on the device, the user will be prompted to install
+         * it inside the SupportMapFragment. This method will only be triggered once the user has
+         * installed Google Play services and returned to the app.
+         */
+
         mMap = googleMap
 
 
@@ -295,7 +354,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return "https://maps.googleapis.com/maps/api/directions/$output?$parameters&key=AIzaSyCo_2MssM-1NXXCJB1A09f5_XlZO1Iuybg"
     }
 
-
+    // permissions
     private fun checkPermission():Boolean{
         if(
             ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
@@ -305,7 +364,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         return false
     }
-
     private fun requestPermission(){
 
         ActivityCompat.requestPermissions(
@@ -313,13 +371,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
         )
     }
-
     private fun isLocationEnabled():Boolean{
         var locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
     }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -332,6 +388,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    // menu
     private fun openHome(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

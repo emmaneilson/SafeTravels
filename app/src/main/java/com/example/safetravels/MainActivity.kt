@@ -3,6 +3,8 @@ package com.example.safetravels
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -69,6 +71,12 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
             }
+        }
+
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
+
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.LEFT)
         }
     }
 

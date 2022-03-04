@@ -1,5 +1,6 @@
 package com.example.safetravels
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,7 +9,6 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -21,7 +21,6 @@ import com.example.safetravels.databinding.ActivityMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
-import android.widget.TextView
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -33,10 +32,9 @@ import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
 import android.os.CountDownTimer
 import android.view.Gravity
-import android.widget.Button
-import android.widget.ImageView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.os.AsyncTask
+import android.widget.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -59,7 +57,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
-    private val isRouteStarted : Boolean = true
+    private lateinit var toggleRouteButton : ToggleButton
+    private var isRouteStarted : Boolean = false
     var counter = 0
     //lateinit var locationRequest: LocationRequest
 
@@ -77,6 +76,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val button = findViewById<Button>(R.id.startbutton)
         button.setOnClickListener {
             ButtClick()
+        }
+
+        toggleRouteButton = findViewById(R.id.routeButton)
+        toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
+            isRouteStarted = !isChecked
         }
 
 
@@ -360,8 +364,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // permissions
     private fun checkPermission():Boolean{
         if(
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ){
             return true
         }
@@ -371,11 +375,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         ActivityCompat.requestPermissions(
           this,
-           arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
+           arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
         )
     }
     private fun isLocationEnabled():Boolean{
-        var locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var locationManager:LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
     }

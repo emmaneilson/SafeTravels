@@ -20,5 +20,6 @@
     <string name="header_logo_description">header logo</string>
     <string name="home_text">Home</string>
     <string name="map_text">Map</string>
-    <string name="toggleButtonText">start route</string>
+    <string name="toggleButtonOn">Start Route</string>
+    <string name="toggleButtonOff">End Route</string>
 </resources>

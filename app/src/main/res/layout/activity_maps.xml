@@ -10,14 +10,14 @@
 
     <!--main app-->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:fontFamily="sans-serif"
         android:fitsSystemWindows="true"
-        android:id="@+id/dashboard"
-        tools:openDrawer="start"
-        tools:context=".MainActivity">
+        android:fontFamily="sans-serif"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        tools:openDrawer="start">
 
         <!--header-->
         <com.google.android.material.appbar.AppBarLayout
@@ -38,10 +38,10 @@
                     android:background="?attr/colorPrimary"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
                 <ImageView
                     android:id="@+id/header_logo"
@@ -90,11 +90,11 @@
         <!--timer-->
         <TextView
             android:id="@+id/Time"
-            android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
+            android:background="@color/white"
             android:textAlignment="center"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -107,11 +107,11 @@
         <!--temporary: timer length (move to settings page)-->
         <TextView
             android:id="@+id/Length"
-            android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
+            android:background="@color/white"
             android:textAlignment="center"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -126,20 +126,20 @@
             android:id="@+id/startbutton"
             android:layout_width="153dp"
             android:layout_height="56dp"
+            android:layout_centerInParent="true"
             android:layout_marginStart="25dp"
             android:layout_marginTop="50dp"
-            android:layout_centerInParent="true"
             android:text="Start Timer"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"/>
+            app:layout_constraintEnd_toStartOf="parent" />
 
         <!--map-->
         <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -164,6 +164,19 @@
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <ToggleButton
+            android:id="@+id/routeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="56dp"
+            android:textOff="@string/toggleButtonOff"
+            android:textOn="@string/toggleButtonOn"
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

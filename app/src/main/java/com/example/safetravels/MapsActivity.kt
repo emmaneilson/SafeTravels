@@ -63,8 +63,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
     private var isRouteStarted : Boolean = false
-    var checkin_length = 1000000 // temporary
-    var timer = 10000000// temporary
+
+    //used in timer but need to get these from settings page
+    var checkin_length = 1 // temporary
+    var timer          = 1// temporary
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,17 +158,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun startTimer() {
         val channelId = "My_Channel_ID2"
 
-        var timer = object : CountDownTimer(timer.toLong()*1000*60, 10000) {
+        var no1: Boolean = true;
+        var no2: Boolean = true;
+        var no3: Boolean = true;
+
+        var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
 
+                Log.d("help", millisUntilFinished.toString())
+                Log.d("okz", (timer*60*1000/4).toString())
+
+
                 //check for notifications
-                if(millisUntilFinished<timer/4*60*1000){onQuarter()}// 1/4 left
-                if(millisUntilFinished<timer/2*60*1000){onHalfway()}// 1/2 left
-                if(millisUntilFinished<timer*3/4*60*1000){onTQuarter()}// 3/4 left
+                if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
+                if(no2 && (millisUntilFinished<timer*60*1000/2)){onHalfway()}// 1/2 left
+                if(no3 && (millisUntilFinished<timer*60*1000*3/4)){onTQuarter()}// 3/4 left
             }
 
             fun onQuarter() {
+
+                no1 = false;
 
                 //send notification
                 Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
@@ -185,7 +197,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
@@ -209,6 +221,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             fun onHalfway() {
 
+                no2 = false;
+
                 //send notification
                 Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
                 var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
@@ -226,7 +240,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
 
 
                     override fun onTick(millisUntilFinished: Long) {
@@ -244,6 +258,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
             fun onTQuarter() {
+
+                no3 = false;
+
                 //send notification
                 Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
                 var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
@@ -261,7 +278,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
@@ -296,7 +313,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 

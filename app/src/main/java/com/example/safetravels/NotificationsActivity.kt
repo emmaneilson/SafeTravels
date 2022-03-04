@@ -67,6 +67,7 @@ class NotificationsActivity : AppCompatActivity() {
                 }
             }
         }
+
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {

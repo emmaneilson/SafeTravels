@@ -59,8 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
     private var isRouteStarted : Boolean = false
-    var counter = 0
-    //lateinit var locationRequest: LocationRequest
+    var checkin_length = 1000000 // temporary
+    var timer = 10000000// temporary
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,21 +69,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         drawerLayout = findViewById(R.id.drawerLayout)
-
-        // set onclick method to button (temporary, timer will start from route)
-        val button = findViewById<Button>(R.id.startbutton)
-        button.setOnClickListener {
-            ButtClick()
-        }
-
         toggleRouteButton = findViewById(R.id.routeButton)
+
+
+        // button to start/stop routes
         toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
             isRouteStarted = !isChecked
+            startTimer()
         }
 
 
+        // main map
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -91,7 +88,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         getLastLocation()
 
+
+        //menu
         navView = findViewById(R.id.nav_menu)
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -121,8 +121,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
-
         hamburgerMenu.setOnClickListener {
             drawerLayout.openDrawer(Gravity.LEFT)
         }
@@ -151,38 +149,103 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // start & display timer
-    private fun ButtClick() {
+    private fun startTimer() {
 
-        // get timer length and start timer
-        object : CountDownTimer(R.id.Length.toLong(), 1000000) {
+        var timer = object : CountDownTimer(timer.toLong()*1000*60, 10000) {
 
-            // update & display time
-            val countTime: TextView = findViewById(R.id.Time)
             override fun onTick(millisUntilFinished: Long) {
 
-                // update timer and update display
-                counter++
-                countTime.text = counter.toString()
 
-                // ongoing checkins
-                if(counter>R.id.Length/4){onQuarter()}// 1/4
-                if(counter>R.id.Length/2){onHalfway()}// 1/2
-                if(counter>R.id.Length*3/4){onTQuarter()}// 3/4
 
+                //check notifications
+                if(millisUntilFinished<timer/4*60*1000){onQuarter()}// 1/4 left
+                if(millisUntilFinished<timer/2*60*1000){onHalfway()}// 1/2 left
+                if(millisUntilFinished<timer*3/4*60*1000){onTQuarter()}// 3/4 left
             }
 
-            // ongoing checkins (todo next sprint)
             fun onQuarter() {
-                countTime.text = "One quarter"
+
+                //send notification
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             fun onHalfway() {
-                countTime.text = "Halfway"
+
+                //send notification
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             fun onTQuarter() {
-                countTime.text = "Three Quarters"
+                //send notification
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             override fun onFinish() {
-                countTime.text = "Finished"
+
+                //send notification
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 10000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
         }.start()
     }
@@ -249,6 +312,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
     inner class DownloadTask :
         AsyncTask<String?, Void?, String>() {
         override fun doInBackground(vararg url: String?): String? {

@@ -59,6 +59,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
+    private val isRouteStarted : Boolean = true
     var counter = 0
     //lateinit var locationRequest: LocationRequest
 
@@ -206,39 +207,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
         mMap.setOnMapClickListener { latLng ->
-            if (markerPoints.size > 1) {
-                markerPoints.clear()
-                mMap.clear()
-            }
+            if (!isRouteStarted) {
+                if (markerPoints.size > 1) {
+                    markerPoints.clear()
+                    mMap.clear()
+                }
 
-            // Adding new item to the ArrayList
-            markerPoints.add(latLng)
+                // Adding new item to the ArrayList
+                markerPoints.add(latLng)
 
-            // Creating MarkerOptions
-            val options = MarkerOptions()
+                // Creating MarkerOptions
+                val options = MarkerOptions()
 
-            // Setting the position of the marker
-            options.position(latLng)
-            if (markerPoints.size === 1) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-            } else if (markerPoints.size === 2) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            }
+                // Setting the position of the marker
+                options.position(latLng)
+                if (markerPoints.size === 1) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                } else if (markerPoints.size === 2) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                }
 
-            // Add new marker to the Google Map Android API V2
-            mMap.addMarker(options)
+                // Add new marker to the Google Map Android API V2
+                mMap.addMarker(options)
 
-            // Checks, whether start and end locations are captured
-            if (markerPoints.size >= 2) {
-                val origin = markerPoints[0] as LatLng
-                val dest = markerPoints[1] as LatLng
+                // Checks, whether start and end locations are captured
+                if (markerPoints.size >= 2) {
+                    val origin = markerPoints[0] as LatLng
+                    val dest = markerPoints[1] as LatLng
 
-                // Getting URL to the Google Directions API
-                val url: String = getDirectionsUrl(origin, dest)
-                val downloadTask = DownloadTask()
+                    // Getting URL to the Google Directions API
+                    val url: String = getDirectionsUrl(origin, dest)
+                    val downloadTask = DownloadTask()
 
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(url)
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url)
+                }
             }
         }
     }

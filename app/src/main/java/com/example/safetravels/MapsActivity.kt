@@ -9,7 +9,6 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,7 +21,6 @@ import com.example.safetravels.databinding.ActivityMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
-import android.widget.TextView
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -34,10 +32,9 @@ import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
 import android.os.CountDownTimer
 import android.view.Gravity
-import android.widget.Button
-import android.widget.ImageView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.os.AsyncTask
+import android.widget.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -46,10 +43,8 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.maps.android.PolyUtil
 
 import org.json.JSONObject
-import kotlin.collections.ArrayList
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -62,8 +57,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var toggleRouteButton : ToggleButton
+    private var isRouteStarted : Boolean = false
     var counter = 0
-    private var polylines: MutableList<LatLng> = ArrayList()
     //lateinit var locationRequest: LocationRequest
 
     // auto create function
@@ -80,6 +76,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val button = findViewById<Button>(R.id.startbutton)
         button.setOnClickListener {
             ButtClick()
+        }
+
+        toggleRouteButton = findViewById(R.id.routeButton)
+        toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
+            isRouteStarted = !isChecked
         }
 
 
@@ -139,7 +140,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }else{
                         userPos = LatLng(location.latitude, location.longitude)
                         onMapReady(mMap)
-
                     }
                 }
             }else{
@@ -159,7 +159,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // update & display time
             val countTime: TextView = findViewById(R.id.Time)
             override fun onTick(millisUntilFinished: Long) {
-                //checkOnRoute()
 
                 // update timer and update display
                 counter++
@@ -188,16 +187,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }.start()
     }
 
-    private fun checkOnRoute() {
-
-        if(PolyUtil.isLocationOnPath(userPos, polylines, true, 5.0)){
-            Log.d("HELP", " on path")
-        }else{
-            Log.d("HELP", " not on path")
-            Toast.makeText(this, "Please get on back on route!", Toast.LENGTH_LONG).show()
-        }
-    }
-
     // start map
     override fun onMapReady(googleMap: GoogleMap) {
         /**
@@ -217,44 +206,46 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             CircleOptions()
                 .center(userPos)
                 .radius(10.0)
-                .strokeColor(Color.LTGRAY)
+                .strokeColor(Color.BLUE)
                 .fillColor(Color.BLUE)
         )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 16f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
         mMap.setOnMapClickListener { latLng ->
-            if (markerPoints.size > 1) {
-                markerPoints.clear()
-                mMap.clear()
-            }
+            if (!isRouteStarted) {
+                if (markerPoints.size > 1) {
+                    markerPoints.clear()
+                    mMap.clear()
+                }
 
-            // Adding new item to the ArrayList
-            markerPoints.add(latLng)
+                // Adding new item to the ArrayList
+                markerPoints.add(latLng)
 
-            // Creating MarkerOptions
-            val options = MarkerOptions()
+                // Creating MarkerOptions
+                val options = MarkerOptions()
 
-            // Setting the position of the marker
-            options.position(latLng)
-            if (markerPoints.size === 1) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-            } else if (markerPoints.size === 2) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            }
+                // Setting the position of the marker
+                options.position(latLng)
+                if (markerPoints.size === 1) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                } else if (markerPoints.size === 2) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                }
 
-            // Add new marker to the Google Map Android API V2
-            mMap.addMarker(options)
+                // Add new marker to the Google Map Android API V2
+                mMap.addMarker(options)
 
-            // Checks, whether start and end locations are captured
-            if (markerPoints.size >= 2) {
-                val origin = markerPoints[0] as LatLng
-                val dest = markerPoints[1] as LatLng
+                // Checks, whether start and end locations are captured
+                if (markerPoints.size >= 2) {
+                    val origin = markerPoints[0] as LatLng
+                    val dest = markerPoints[1] as LatLng
 
-                // Getting URL to the Google Directions API
-                val url: String = getDirectionsUrl(origin, dest)
-                val downloadTask = DownloadTask()
+                    // Getting URL to the Google Directions API
+                    val url: String = getDirectionsUrl(origin, dest)
+                    val downloadTask = DownloadTask()
 
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(url)
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url)
+                }
             }
         }
     }
@@ -308,7 +299,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val lng = point["lng"]!!.toDouble()
                     val position = LatLng(lat, lng)
                     points.add(position)
-                    polylines.add(position);
                 }
                 lineOptions.addAll(points)
                 lineOptions.width(12f)
@@ -318,7 +308,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions)
-
         }
     }
 
@@ -375,8 +364,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // permissions
     private fun checkPermission():Boolean{
         if(
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ){
             return true
         }
@@ -386,11 +375,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         ActivityCompat.requestPermissions(
           this,
-           arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
+           arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
         )
     }
     private fun isLocationEnabled():Boolean{
-        var locationManager:LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var locationManager:LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
     }

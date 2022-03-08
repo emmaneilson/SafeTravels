@@ -1,6 +1,8 @@
 package com.example.safetravels
 
 import android.Manifest
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -63,6 +65,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
     private var isRouteStarted : Boolean = false
+    var no1: Boolean = true
+    var no2: Boolean = true
+    var no3: Boolean = true
 
     //used in timer but need to get these from settings page
     var checkin_length = 1 // temporary
@@ -158,19 +163,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun startTimer() {
         val channelId = "My_Channel_ID2"
 
-        var no1: Boolean = true;
-        var no2: Boolean = true;
-        var no3: Boolean = true;
+        no1 = true
+        no2 = true
+        no3 = true
 
 
 
         var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-
-                Log.d("help", millisUntilFinished.toString())
-                Log.d("okz", (timer*60*1000/4).toString())
-
 
                 //check for notifications
                 if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
@@ -183,10 +184,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 no1 = false;
 
                 //send notification
-                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplicationContext(), "LAST QUARTER", Toast.LENGTH_SHORT).show()
                 var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("QUARTER")
+                    .setContentTitle("LAST QUARTER")
                     .setContentText("hi there, hope your walk is going well")
                     .setStyle(
                         NotificationCompat.BigTextStyle()
@@ -195,7 +196,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 with(NotificationManagerCompat.from(getApplicationContext())) {
                     // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
+                    notify(11111, builder.build())
                 }
 
                 // start notification timer (get checkin_length from settings)
@@ -204,15 +205,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     override fun onTick(millisUntilFinished: Long) {
 
                         //checkin on notifications
-                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
-                            //anotherNotification()
+                        if(true){
+                            if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                                //anotherNotification()
+                            }
+                            if (millisUntilFinished < checkin_length * 60 * 1000) {
+                                //finalNotification()
+                            }
+                            if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
+                                //emergencyProcedure()
+                            }
                         }
-                        if (millisUntilFinished < checkin_length * 60 * 1000) {
-                            //finalNotification()
-                        }
-                        if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
-                            //emergencyProcedure()
-                        }
+
 
                     }
                     override fun onFinish() {
@@ -226,7 +230,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 no2 = false;
 
                 //send notification
-                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplicationContext(), "HALFWAY", Toast.LENGTH_SHORT).show()
                 var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("HALFWAY")
@@ -236,9 +240,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .bigText("dismiss the notification to let us know you're ok"))
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
 
+
                 with(NotificationManagerCompat.from(getApplicationContext())) {
                     // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
+                    notify(22222, builder.build())
                 }
 
                 // start notification timer (get checkin_length from settings)
@@ -264,10 +269,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 no3 = false;
 
                 //send notification
-                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplicationContext(), "FIRST QUARTER", Toast.LENGTH_SHORT).show()
                 var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("THIRD QUARTER")
+                    .setContentTitle("FIRST QUARTER")
                     .setContentText("hi there, hope your walk is going well time's almost up")
                     .setStyle(
                         NotificationCompat.BigTextStyle()
@@ -276,7 +281,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 with(NotificationManagerCompat.from(getApplicationContext())) {
                     // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
+                    notify(33333, builder.build())
                 }
 
                 // start notification timer (get checkin_length from settings)
@@ -311,7 +316,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 with(NotificationManagerCompat.from(getApplicationContext())) {
                     // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
+                    notify(44444, builder.build())
                 }
 
                 // start notification timer (get checkin_length from settings)
@@ -335,6 +340,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private fun stopTimer(){
+        no1 = false
+        no2 = false
+        no3 = false
+    }
     // start map
     override fun onMapReady(googleMap: GoogleMap) {
         /**

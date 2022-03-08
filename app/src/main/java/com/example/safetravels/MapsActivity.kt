@@ -49,6 +49,8 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.PolyUtil
+
 
 import org.json.JSONObject
 
@@ -65,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
     private var isRouteStarted : Boolean = false
+    private var polylines: MutableList<LatLng> = ArrayList()
     var no1: Boolean = true
     var no2: Boolean = true
     var no3: Boolean = true
@@ -170,6 +173,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         no3 = true
 
         var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
+
+            val isOnRoute = checkOnRoute()
 
             override fun onTick(millisUntilFinished: Long) {
 
@@ -519,6 +524,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         no2 = false
         no3 = false
     }
+
+    private fun checkOnRoute(): Boolean {
+        val channelId = "My_Channel_ID2"
+        if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)){
+            Log.d("HELP", "on path")
+            return true
+        }else {
+            Log.d("HELP", "not on path")
+            return false
+        }
+    }
+
     // start map
     override fun onMapReady(googleMap: GoogleMap) {
         /**
@@ -538,10 +555,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             CircleOptions()
                 .center(userPos)
                 .radius(10.0)
-                .strokeColor(Color.BLUE)
+                .strokeColor(Color.LTGRAY)
                 .fillColor(Color.BLUE)
         )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 16f))
         mMap.setOnMapClickListener { latLng ->
             if (!isRouteStarted) {
                 if (markerPoints.size > 1) {
@@ -632,6 +649,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val lng = point["lng"]!!.toDouble()
                     val position = LatLng(lat, lng)
                     points.add(position)
+                    polylines.add(position)
                 }
                 lineOptions.addAll(points)
                 lineOptions.width(12f)

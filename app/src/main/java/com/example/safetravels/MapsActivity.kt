@@ -162,6 +162,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var no2: Boolean = true;
         var no3: Boolean = true;
 
+
+
         var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -330,6 +332,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
         }.start()
+
     }
 
     // start map

@@ -68,10 +68,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var no1: Boolean = true
     var no2: Boolean = true
     var no3: Boolean = true
+    var o1: Boolean = true
+    var o2: Boolean = true
+    var o3: Boolean = true
 
     //used in timer but need to get these from settings page
-    var checkin_length = 1 // temporary
-    var timer          = 1// temporary
+    var timer          = 2// temporary
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // button to start/stop routes
         toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
             isRouteStarted = !isChecked
-            if(isChecked){
+            if(!isChecked){
                 startTimer()
             }else stopTimer()
         }
@@ -179,176 +181,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if(no3 && (millisUntilFinished<timer*60*1000*3/4)){onTQuarter()}// 3/4 left
             }
 
-            fun onQuarter() {
-
-                no1 = false;
-
-                //send notification
-                Toast.makeText(getApplicationContext(), "LAST QUARTER", Toast.LENGTH_SHORT).show()
-                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("LAST QUARTER")
-                    .setContentText("hi there, hope your walk is going well")
-                    .setStyle(
-                        NotificationCompat.BigTextStyle()
-                        .bigText("dismiss the notification to let us know you're ok"))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                with(NotificationManagerCompat.from(getApplicationContext())) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(11111, builder.build())
-                }
-
-                // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
-
-                    override fun onTick(millisUntilFinished: Long) {
-
-                        //checkin on notifications if not acknowledged
-                        if(true) {
-                            if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
-                                //anotherNotification
-                                Toast.makeText(
-                                    getApplicationContext(),
-                                    "LAST QUARTER",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                var builder =
-                                    NotificationCompat.Builder(getApplicationContext(), channelId)
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                        .setContentTitle("are you still there?")
-                                        .setStyle(
-                                            NotificationCompat.BigTextStyle()
-                                                .bigText("dismiss the notification to let us know you're ok")
-                                        )
-                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                                with(NotificationManagerCompat.from(getApplicationContext())) {
-                                    // notificationId is a unique int for each notification that you must define
-                                    notify(11112, builder.build())
-                                }
-                            }
-                            if (millisUntilFinished < checkin_length * 60 * 1000) {
-                                //finalNotification()
-                                Toast.makeText(
-                                    getApplicationContext(),
-                                    "LAST QUARTER",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                var builder =
-                                    NotificationCompat.Builder(getApplicationContext(), channelId)
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                        .setContentTitle("are you ok?")
-                                        .setStyle(
-                                            NotificationCompat.BigTextStyle()
-                                                .bigText("dismiss the notification to let us know you're ok")
-                                        )
-                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                                with(NotificationManagerCompat.from(getApplicationContext())) {
-                                    // notificationId is a unique int for each notification that you must define
-                                    notify(11113, builder.build())
-                                }
-                            }
-                            if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
-                                //emergencyProcedure()
-                            }
-                        }
-                    }
-                    override fun onFinish() {
-                        //emergencyProcedure()
-                    }
-                }
-
-            }
-            fun onHalfway() {
-
-                no2 = false;
-
-                //send notification
-                Toast.makeText(getApplicationContext(), "HALFWAY", Toast.LENGTH_SHORT).show()
-                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("HALFWAY")
-                    .setContentText("hi there, hope your walk is going well you're halfway out of time")
-                    .setStyle(
-                        NotificationCompat.BigTextStyle()
-                            .bigText("dismiss the notification to let us know you're ok"))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-
-                with(NotificationManagerCompat.from(getApplicationContext())) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(22222, builder.build())
-                }
-
-                // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
-
-
-                    override fun onTick(millisUntilFinished: Long) {
-
-                        //checkin on notifications if not acknowledged
-                        if(true) {
-                            if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
-                                //anotherNotification
-                                Toast.makeText(
-                                    getApplicationContext(),
-                                    "LAST QUARTER",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                var builder =
-                                    NotificationCompat.Builder(getApplicationContext(), channelId)
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                        .setContentTitle("are you still there?")
-                                        .setStyle(
-                                            NotificationCompat.BigTextStyle()
-                                                .bigText("dismiss the notification to let us know you're ok")
-                                        )
-                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                                with(NotificationManagerCompat.from(getApplicationContext())) {
-                                    // notificationId is a unique int for each notification that you must define
-                                    notify(22223, builder.build())
-                                }
-                            }
-                            if (millisUntilFinished < checkin_length * 60 * 1000) {
-                                //finalNotification()
-                                Toast.makeText(
-                                    getApplicationContext(),
-                                    "LAST QUARTER",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                var builder =
-                                    NotificationCompat.Builder(getApplicationContext(), channelId)
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                        .setContentTitle("are you ok?")
-                                        .setStyle(
-                                            NotificationCompat.BigTextStyle()
-                                                .bigText("dismiss the notification to let us know you're ok")
-                                        )
-                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                                with(NotificationManagerCompat.from(getApplicationContext())) {
-                                    // notificationId is a unique int for each notification that you must define
-                                    notify(22224, builder.build())
-                                }
-                            }
-                            if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
-                                //emergencyProcedure()
-                            }
-                        }
-
-                    }
-                    override fun onFinish() {
-                        //emergencyProcedure()
-                    }
-                }
-
-            }
+            //called on first quarter of timer
             fun onTQuarter() {
 
-                no3 = false;
+                no3 = false
 
                 //send notification
                 Toast.makeText(getApplicationContext(), "FIRST QUARTER", Toast.LENGTH_SHORT).show()
@@ -367,13 +203,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
+
+                    var n1: Boolean = true
+                    var n2: Boolean = true
 
                     override fun onTick(millisUntilFinished: Long) {
 
-                        //checkin on notifications if not acknowledged
+                        // checkin on notifications if not acknowledged
                         if(true) {
-                            if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+
+                            // send reminder notification on first quarter
+                            if (n1 && millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                                 //anotherNotification
                                 Toast.makeText(
                                     getApplicationContext(),
@@ -395,7 +236,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     notify(33334, builder.build())
                                 }
                             }
-                            if (millisUntilFinished < checkin_length * 60 * 1000) {
+
+                            // send notification if no reply after 1/2
+                            if (n2 && millisUntilFinished < timer/4 * 60 * 1000) {
                                 //finalNotification()
                                 Toast.makeText(
                                     getApplicationContext(),
@@ -417,7 +260,93 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     notify(33335, builder.build())
                                 }
                             }
-                            if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
+
+                        }
+
+                    }
+                    // start emergency procedure after timer expires
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }.start()
+
+            }
+
+            //called halfway on timer
+            fun onHalfway() {
+
+                no2 = false
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "HALFWAY", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("HALFWAY")
+                    .setContentText("hi there, hope your walk is going well you're halfway out of time")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(22222, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
+
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //checkin on notifications if not acknowledged
+                        if(true) {
+                            if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
+                                //anotherNotification
+                                Toast.makeText(
+                                    getApplicationContext(),
+                                    "LAST QUARTER",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                var builder =
+                                    NotificationCompat.Builder(getApplicationContext(), channelId)
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentTitle("are you still there?")
+                                        .setStyle(
+                                            NotificationCompat.BigTextStyle()
+                                                .bigText("dismiss the notification to let us know you're ok")
+                                        )
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                                with(NotificationManagerCompat.from(getApplicationContext())) {
+                                    // notificationId is a unique int for each notification that you must define
+                                    notify(22223, builder.build())
+                                }
+                            }
+                            if (millisUntilFinished < timer/4 * 60 * 1000) {
+                                //finalNotification()
+                                Toast.makeText(
+                                    getApplicationContext(),
+                                    "LAST QUARTER",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                var builder =
+                                    NotificationCompat.Builder(getApplicationContext(), channelId)
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentTitle("are you ok?")
+                                        .setStyle(
+                                            NotificationCompat.BigTextStyle()
+                                                .bigText("dismiss the notification to let us know you're ok")
+                                        )
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                                with(NotificationManagerCompat.from(getApplicationContext())) {
+                                    // notificationId is a unique int for each notification that you must define
+                                    notify(22224, builder.build())
+                                }
+                            }
+                            if (millisUntilFinished < timer/4 * 2 * 60 * 1000) {
                                 //emergencyProcedure()
                             }
                         }
@@ -426,9 +355,95 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     override fun onFinish() {
                         //emergencyProcedure()
                     }
-                }
+                }.start()
 
             }
+
+            // called on last quarter
+            fun onQuarter() {
+
+                no1 = false
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "LAST QUARTER", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("LAST QUARTER")
+                    .setContentText("hi there, hope your walk is going well")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(11111, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //checkin on notifications if not acknowledged
+                        if(true) {
+                            if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
+
+                                //anotherNotification
+                                Toast.makeText(
+                                    getApplicationContext(),
+                                    "LAST QUARTER",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                var builder =
+                                    NotificationCompat.Builder(getApplicationContext(), channelId)
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentTitle("are you still there?")
+                                        .setStyle(
+                                            NotificationCompat.BigTextStyle()
+                                                .bigText("dismiss the notification to let us know you're ok")
+                                        )
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                                with(NotificationManagerCompat.from(getApplicationContext())) {
+                                    // notificationId is a unique int for each notification that you must define
+                                    notify(11112, builder.build())
+                                }
+                            }
+                            if (millisUntilFinished < timer/4 * 60 * 1000) {
+                                //finalNotification()
+                                Toast.makeText(
+                                    getApplicationContext(),
+                                    "LAST QUARTER",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                var builder =
+                                    NotificationCompat.Builder(getApplicationContext(), channelId)
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentTitle("are you ok?")
+                                        .setStyle(
+                                            NotificationCompat.BigTextStyle()
+                                                .bigText("dismiss the notification to let us know you're ok")
+                                        )
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                                with(NotificationManagerCompat.from(getApplicationContext())) {
+                                    // notificationId is a unique int for each notification that you must define
+                                    notify(11113, builder.build())
+                                }
+                            }
+                            if (millisUntilFinished < timer/4 * 2 * 60 * 1000) {
+                                //emergencyProcedure()
+                            }
+                        }
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }.start()
+
+            }
+
             override fun onFinish() {
 
                 //send notification
@@ -448,13 +463,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
                         //checkin on notifications if not acknowledged
                         if(true) {
-                            if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                                 //anotherNotification
                                 Toast.makeText(
                                     getApplicationContext(),
@@ -476,7 +491,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     notify(44445, builder.build())
                                 }
                             }
-                            if (millisUntilFinished < checkin_length * 60 * 1000) {
+                            if (millisUntilFinished < timer/4 * 60 * 1000) {
                                 //finalNotification()
                                 Toast.makeText(
                                     getApplicationContext(),
@@ -498,7 +513,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     notify(44446, builder.build())
                                 }
                             }
-                            if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
+                            if (millisUntilFinished < timer/4 * 2 * 60 * 1000) {
                                 //emergencyProcedure()
                             }
                         }

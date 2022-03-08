@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -58,6 +59,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
+    private lateinit var emergencyCallButton : Button
     private var isRouteStarted : Boolean = false
     var counter = 0
     //lateinit var locationRequest: LocationRequest
@@ -81,6 +83,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         toggleRouteButton = findViewById(R.id.routeButton)
         toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
             isRouteStarted = !isChecked
+        }
+
+        emergencyCallButton = findViewById(R.id.EmergencyCallButton)
+        emergencyCallButton.setOnClickListener{
+            val number = "tel:911"
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
+            startActivity(intent)
         }
 
 

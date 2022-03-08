@@ -9,9 +9,12 @@ import android.location.LocationManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
 import android.view.Gravity
-import android.widget.*
+import android.widget.ImageView
+import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -34,7 +37,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -49,6 +52,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var toggleRouteButton : ToggleButton
     private var isRouteStarted : Boolean = false
     private var polylines: MutableList<LatLng> = ArrayList()
+    private val SHORT_DELAY = 2000 // 2 seconds
 
     //used in timer but need to get these from settings page
     var checkin_length = 1 // temporary
@@ -144,17 +148,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun startTimer() {
         val channelId = "My_Channel_ID2"
 
+        val toast = Toast.makeText(getApplicationContext(), "click", Toast.LENGTH_SHORT)
+        toast.show()
+
         var no1: Boolean = true;
         var no2: Boolean = true;
         var no3: Boolean = true;
 
-
+       checkOnRoute()
 
         var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
 
-                val isOnRoute = checkOnRoute()
+
 
                 //check for notifications
                 if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
@@ -319,17 +326,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun checkOnRoute(): Boolean {
-        val channelId = "My_Channel_ID2"
-        if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)){
-            Log.d("HELP", "on path")
-            return true
-        }else {
-            Log.d("HELP", "not on path")
-            return false
-        }
-    }
+    private fun checkOnRoute(){
 
+        val channelId = "My_Channel_ID2"
+
+        var timer = object : CountDownTimer(1*1000*60, 5000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)) {
+                    Log.d("HELP", "on path")
+                }else {
+                    Log.d("HELP", "not on path")
+                    val toast = Toast.makeText(getApplicationContext(), "get on path!", Toast.LENGTH_SHORT)
+                    toast.show()
+
+
+                }
+            }
+            override fun onFinish() {
+
+
+            }
+
+        }.start()
+
+    }
+    fun showToastMessage(text: String?, duration: Int) {
+        val toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast.show()
+        val handler = Handler()
+        handler.postDelayed(Runnable { toast.cancel() }, duration.toLong())
+    }
     // start map
     override fun onMapReady(googleMap: GoogleMap) {
         /**

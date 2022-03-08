@@ -154,6 +154,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onTick(millisUntilFinished: Long) {
 
+                val isOnRoute = checkOnRoute()
 
                 //check for notifications
                 if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left

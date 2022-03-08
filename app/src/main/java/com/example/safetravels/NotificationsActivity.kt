@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -36,7 +37,10 @@ class NotificationsActivity : AppCompatActivity() {
 
         navView = findViewById(R.id.nav_menu)
         drawerLayout = findViewById(R.id.drawerLayout)
-
+        val save : Button = findViewById(R.id.save)
+        save.setOnClickListener {
+            save()
+        }
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
@@ -70,6 +74,7 @@ class NotificationsActivity : AppCompatActivity() {
         hamburgerMenu.setOnClickListener {
             drawerLayout.openDrawer(Gravity.LEFT)
         }
+
     }
 
     private fun save(){

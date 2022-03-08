@@ -51,7 +51,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var polylines: MutableList<LatLng> = ArrayList()
 
     //used in timer gets it from notification/settings page
-    var timer = MyApplication.Companion.timer
+    var timer = MyApplication.Companion.timer.toLong()
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,18 +182,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
                         //checkin on notifications
-                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                             //anotherNotification()
                         }
-                        if (millisUntilFinished < checkin_length * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 * 60 * 1000) {
                             //finalNotification()
                         }
-                        if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 * 2 * 60 * 1000) {
                             //emergencyProcedure()
                         }
 
@@ -225,13 +225,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
 
 
                     override fun onTick(millisUntilFinished: Long) {
 
                         //check notifications
-                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                             //anotherNotification()
                         }
 
@@ -263,12 +263,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
                         //check notifications
-                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                             //anotherNotification()
                         }
 
@@ -298,12 +298,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
 
                 // start notification timer (get checkin_length from settings)
-                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+                var timer = object : CountDownTimer((60*1000*timer/4).toLong(), 1000) {
 
                     override fun onTick(millisUntilFinished: Long) {
 
                         //check notifications
-                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                        if (millisUntilFinished < timer/4 / 2 * 60 * 1000) {
                             //anotherNotification()
                         }
 

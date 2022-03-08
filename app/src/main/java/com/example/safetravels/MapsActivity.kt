@@ -55,7 +55,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var emergencyCallButton : Button
     private var isRouteStarted : Boolean = false
     private var polylines: MutableList<LatLng> = ArrayList()
-    private val SHORT_DELAY = 2000 // 2 seconds
+
 
     //used in timer gets it from notification/settings page
     var timer = MyApplication.timer.toLong()
@@ -160,9 +160,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun startTimer() {
         val channelId = "My_Channel_ID2"
 
-        val toast = Toast.makeText(getApplicationContext(), "click", Toast.LENGTH_SHORT)
-        toast.show()
-
         var no1: Boolean = true;
         var no2: Boolean = true;
         var no3: Boolean = true;
@@ -172,8 +169,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-
-
 
                 //check for notifications
                 if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
@@ -349,10 +344,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.d("HELP", "on path")
                 }else {
                     Log.d("HELP", "not on path")
-                    val toast = Toast.makeText(getApplicationContext(), "get on path!", Toast.LENGTH_SHORT)
+                    val toast = Toast.makeText(getApplicationContext(), "get on path!" +
+                            " if you are not safe, use emergency call", Toast.LENGTH_SHORT)
                     toast.show()
-
-
                 }
             }
             override fun onFinish() {

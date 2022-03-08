@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -47,11 +48,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
+    private lateinit var emergencyCallButton : Button
     private var isRouteStarted : Boolean = false
     private var polylines: MutableList<LatLng> = ArrayList()
 
     //used in timer gets it from notification/settings page
-    var timer = MyApplication.Companion.timer.toLong()
+    var timer = MyApplication.timer.toLong()
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +71,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             isRouteStarted = !isChecked
             startTimer()
         }
-
+        emergencyCallButton = findViewById(R.id.EmergencyCallButton)
+        emergencyCallButton.setOnClickListener {
+            val number = "tel:911"
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
+            startActivity(intent)
+        }
 
         // main map
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)

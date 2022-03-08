@@ -50,9 +50,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var isRouteStarted : Boolean = false
     private var polylines: MutableList<LatLng> = ArrayList()
 
-    //used in timer but need to get these from settings page
-    var checkin_length = 1 // temporary
-    var timer          = 1// temporary
+    //used in timer gets it from notification/settings page
+    var timer = MyApplication.Companion.timer
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {

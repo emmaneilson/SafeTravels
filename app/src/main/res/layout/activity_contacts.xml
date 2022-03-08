@@ -126,17 +126,17 @@
             <!--input name, number-->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addContact"
-                android:layout_height="wrap_content"
                 android:layout_width="200dp"
-                android:layout_marginStart="25dp"/>
+                android:layout_height="31dp"
+                android:layout_marginStart="25dp" />
 
             <!--submit-->
             <Button
                 android:id="@+id/subContact"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_marginStart="25dp"/>
+                android:layout_height="38dp"
+                android:layout_marginStart="25dp"
+                android:text="Save" />
 
         </LinearLayout>
 

@@ -1,52 +1,40 @@
 package com.example.safetravels
 
+
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.view.Gravity
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.safetravels.databinding.ActivityMapsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.example.safetravels.databinding.ActivityMapsBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-
-import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.model.*
 import com.google.android.material.navigation.NavigationView
-import java.text.SimpleDateFormat
-import java.util.*
-import com.google.android.gms.maps.model.CircleOptions
-import android.os.CountDownTimer
-import android.view.Gravity
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import android.os.AsyncTask
-import android.widget.*
+import com.google.maps.android.PolyUtil
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
-import com.google.android.gms.maps.model.PolylineOptions
-
-import org.json.JSONObject
-
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -59,10 +47,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
-    private lateinit var emergencyCallButton : Button
     private var isRouteStarted : Boolean = false
-    var counter = 0
-    //lateinit var locationRequest: LocationRequest
+    private var polylines: MutableList<LatLng> = ArrayList()
+
+    //used in timer but need to get these from settings page
+    var checkin_length = 1 // temporary
+    var timer          = 1// temporary
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,28 +61,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         drawerLayout = findViewById(R.id.drawerLayout)
-
-        // set onclick method to button (temporary, timer will start from route)
-        val button = findViewById<Button>(R.id.startbutton)
-        button.setOnClickListener {
-            ButtClick()
-        }
-
         toggleRouteButton = findViewById(R.id.routeButton)
+
+
+        // button to start/stop routes
         toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
             isRouteStarted = !isChecked
-        }
-
-        emergencyCallButton = findViewById(R.id.EmergencyCallButton)
-        emergencyCallButton.setOnClickListener{
-            val number = "tel:911"
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
-            startActivity(intent)
+            startTimer()
         }
 
 
+        // main map
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -100,7 +80,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         getLastLocation()
 
+
+        //menu
         navView = findViewById(R.id.nav_menu)
+        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -130,8 +113,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        val hamburgerMenu = findViewById<ImageView>(R.id.menu_icon)
-
         hamburgerMenu.setOnClickListener {
             drawerLayout.openDrawer(Gravity.LEFT)
         }
@@ -160,40 +141,192 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // start & display timer
-    private fun ButtClick() {
+    private fun startTimer() {
+        val channelId = "My_Channel_ID2"
 
-        // get timer length and start timer
-        object : CountDownTimer(R.id.Length.toLong(), 1000000) {
+        var no1: Boolean = true;
+        var no2: Boolean = true;
+        var no3: Boolean = true;
 
-            // update & display time
-            val countTime: TextView = findViewById(R.id.Time)
+
+
+        var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
+
             override fun onTick(millisUntilFinished: Long) {
 
-                // update timer and update display
-                counter++
-                countTime.text = counter.toString()
 
-                // ongoing checkins
-                if(counter>R.id.Length/4){onQuarter()}// 1/4
-                if(counter>R.id.Length/2){onHalfway()}// 1/2
-                if(counter>R.id.Length*3/4){onTQuarter()}// 3/4
-
+                //check for notifications
+                if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
+                if(no2 && (millisUntilFinished<timer*60*1000/2)){onHalfway()}// 1/2 left
+                if(no3 && (millisUntilFinished<timer*60*1000*3/4)){onTQuarter()}// 3/4 left
             }
 
-            // ongoing checkins (todo next sprint)
             fun onQuarter() {
-                countTime.text = "One quarter"
+
+                no1 = false;
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("QUARTER")
+                    .setContentText("hi there, hope your walk is going well")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                        .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(12345, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //checkin on notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+                        if (millisUntilFinished < checkin_length * 60 * 1000) {
+                            //finalNotification()
+                        }
+                        if (millisUntilFinished < checkin_length * 2 * 60 * 1000) {
+                            //emergencyProcedure()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             fun onHalfway() {
-                countTime.text = "Halfway"
+
+                no2 = false;
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("HALFWAY")
+                    .setContentText("hi there, hope your walk is going well you're halfway out of time")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(12345, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             fun onTQuarter() {
-                countTime.text = "Three Quarters"
+
+                no3 = false;
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("THIRD QUARTER")
+                    .setContentText("hi there, hope your walk is going well time's almost up")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(12345, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
             override fun onFinish() {
-                countTime.text = "Finished"
+
+                //send notification
+                Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT).show()
+                var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("FINISH")
+                    .setContentText("hi there, hope your walk went well and is over now")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("dismiss the notification to let us know you're ok"))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                with(NotificationManagerCompat.from(getApplicationContext())) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(12345, builder.build())
+                }
+
+                // start notification timer (get checkin_length from settings)
+                var timer = object : CountDownTimer((60*1000*checkin_length).toLong(), 1000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+
+                        //check notifications
+                        if (millisUntilFinished < checkin_length / 2 * 60 * 1000) {
+                            //anotherNotification()
+                        }
+
+                    }
+                    override fun onFinish() {
+                        //emergencyProcedure()
+                    }
+                }
+
             }
         }.start()
+
+    }
+
+    private fun checkOnRoute(): Boolean {
+        val channelId = "My_Channel_ID2"
+        if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)){
+            Log.d("HELP", "on path")
+            return true
+        }else {
+            Log.d("HELP", "not on path")
+            return false
+        }
     }
 
     // start map
@@ -215,10 +348,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             CircleOptions()
                 .center(userPos)
                 .radius(10.0)
-                .strokeColor(Color.BLUE)
+                .strokeColor(Color.LTGRAY)
                 .fillColor(Color.BLUE)
         )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 17f))
         mMap.setOnMapClickListener { latLng ->
             if (!isRouteStarted) {
                 if (markerPoints.size > 1) {
@@ -258,6 +391,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
     inner class DownloadTask :
         AsyncTask<String?, Void?, String>() {
         override fun doInBackground(vararg url: String?): String? {
@@ -308,6 +442,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val lng = point["lng"]!!.toDouble()
                     val position = LatLng(lat, lng)
                     points.add(position)
+                    polylines.add(position)
+
                 }
                 lineOptions.addAll(points)
                 lineOptions.width(12f)

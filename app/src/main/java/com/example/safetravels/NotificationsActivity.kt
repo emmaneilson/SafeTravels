@@ -5,18 +5,22 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.Toast
+import android.widget.*
 import com.google.android.material.navigation.NavigationView
-import android.widget.Switch
-import android.widget.CompoundButton
-import android.widget.ImageView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
+class MyApplication: android.app.Application() {
+    companion object {
+        var timer = 1
+        var dist = 1
+    }
+}
 
 class NotificationsActivity : AppCompatActivity() {
     private lateinit var toggleNotification: Switch
@@ -33,41 +37,10 @@ class NotificationsActivity : AppCompatActivity() {
 
         navView = findViewById(R.id.nav_menu)
         drawerLayout = findViewById(R.id.drawerLayout)
-
-        toggleNotification = findViewById(R.id.notification1)
-        toggleNotification.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                Toast.makeText(this, "Notification 1 On", Toast.LENGTH_SHORT).show()
-                var builder = NotificationCompat.Builder(this, channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Notification 1 On")
-                    .setContentText("notification 1 has been turned on")
-                    .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText("notification 1 has been turned on"))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                with(NotificationManagerCompat.from(this)) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
-                }
-
-            } else {
-                Toast.makeText(this, "Notification 1 Off", Toast.LENGTH_SHORT).show()
-                var builder = NotificationCompat.Builder(this, channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Notification 1 Off")
-                    .setContentText("notification 1 has been turned off")
-                    .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText("notification 1 has been turned off"))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                with(NotificationManagerCompat.from(this)) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(12345, builder.build())
-                }
-            }
+        val save : Button = findViewById(R.id.save)
+        save.setOnClickListener {
+            save()
         }
-
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
@@ -101,6 +74,17 @@ class NotificationsActivity : AppCompatActivity() {
         hamburgerMenu.setOnClickListener {
             drawerLayout.openDrawer(Gravity.LEFT)
         }
+
+    }
+
+    private fun save(){
+
+        val t: TextView = findViewById(R.id.timer)
+        MyApplication.Companion.timer = Integer.valueOf(t.text.toString())
+
+        val v: TextView = findViewById(R.id.dist)
+        MyApplication.Companion.dist = Integer.valueOf(v.text.toString())
+
     }
 
     private fun openHome(){

@@ -1,37 +1,43 @@
 package com.example.safetravels
 
+
 import android.Manifest
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
-import androidx.core.app.ActivityCompat
+import android.view.Gravity
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Button
 
 
 
+import android.widget.ToggleButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.safetravels.databinding.ActivityMapsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.example.safetravels.databinding.ActivityMapsBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-
-import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.model.*
 import com.google.android.material.navigation.NavigationView
 import java.util.*
 import com.google.android.gms.maps.model.CircleOptions
@@ -42,16 +48,14 @@ import android.os.AsyncTask
 import android.widget.*
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.maps.android.PolyUtil
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
-import com.google.android.gms.maps.model.PolylineOptions
-
-import org.json.JSONObject
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -65,6 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toggleRouteButton : ToggleButton
+    private lateinit var emergencyCallButton : Button
     private var isRouteStarted : Boolean = false
     var checkins : Long = 0;
     var no1: Boolean = true
@@ -76,6 +81,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //used in timer but need to get these from settings page
     var timer          = 2// temporary
+    private var polylines: MutableList<LatLng> = ArrayList()
+    private var lineOptions= PolylineOptions()
+
+    //used in timer gets it from notification/settings page
+    var timer = MyApplication.timer.toLong()
 
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +110,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         checkinButton.setOnClickListener{
             checkins++
         }
-
+        emergencyCallButton = findViewById(R.id.EmergencyCallButton)
+        emergencyCallButton.setOnClickListener {
+            val number = "tel:911"
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
+            startActivity(intent)
+        }
 
         // main map
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -169,18 +184,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestPermission()
         }
     }
+    private fun emergencyProcedure(){
+        val number = "tel:911"
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
+        startActivity(intent)
+    }
 
     // start & display timer
     private fun startTimer() {
+
+
         val channelId = "My_Channel_ID2"
+        val button: Button = findViewById(R.id.routeButton)
 
         no1 = true
         no2 = true
         no3 = true
 
-        var timer = object : CountDownTimer(timer.toLong()*1000*60, 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
+        button.setOnClickListener {
+            Toast.makeText(this, "clicked me", Toast.LENGTH_SHORT).show()
+            if (button.text == "End Route") {
+                checkOnRoute()
+                var timer = object : CountDownTimer(timer.toLong() * 1000 * 60, 1000) {
 
                 //check for notifications
                 if(no1 && (millisUntilFinished<timer*60*1000/4)){onQuarter()}// 1/4 left
@@ -531,9 +556,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             //emergencyProcedure()
                         }
                     }
-
                 }
             }
+
         }.start()
 
     }
@@ -563,10 +588,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             CircleOptions()
                 .center(userPos)
                 .radius(10.0)
-                .strokeColor(Color.BLUE)
+                .strokeColor(Color.LTGRAY)
                 .fillColor(Color.BLUE)
         )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 15f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPos, 17f))
         mMap.setOnMapClickListener { latLng ->
             if (!isRouteStarted) {
                 if (markerPoints.size > 1) {
@@ -647,7 +672,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         override fun onPostExecute(result: List<List<HashMap<String, String>>>?) {
             val points = ArrayList<LatLng?>()
-            var lineOptions= PolylineOptions()
+
             val markerOptions = MarkerOptions()
             for (i in result!!.indices) {
                 val path = result[i]
@@ -657,6 +682,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val lng = point["lng"]!!.toDouble()
                     val position = LatLng(lat, lng)
                     points.add(position)
+                    polylines.add(position)
+
                 }
                 lineOptions.addAll(points)
                 lineOptions.width(12f)

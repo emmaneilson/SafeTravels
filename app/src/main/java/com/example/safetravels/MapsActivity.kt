@@ -153,6 +153,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // start & display timer
     private fun startTimer() {
+
+
         val channelId = "My_Channel_ID2"
 
         var no1: Boolean = true;
@@ -332,16 +334,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val channelId = "My_Channel_ID2"
 
-        var timer = object : CountDownTimer(1*1000*60, 5000) {
+        var timer = object : CountDownTimer(1*1000*60, 15000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)) {
                     Log.d("HELP", "on path")
                 }else {
-                    Log.d("HELP", "not on path")
-                    val toast = Toast.makeText(getApplicationContext(), "get on path!" +
-                            " if you are not safe, use emergency call", Toast.LENGTH_SHORT)
-                    toast.show()
+                    val button: Button = findViewById(R.id.routeButton)
+                    if(button.text == "End Route") {
+                        Log.d("HELP", "not on path")
+
+                        Toast.makeText(getApplicationContext(), "ROUTE DEVIATION", Toast.LENGTH_SHORT)
+                        var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
+                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setContentTitle("ROUTE DEVIATION")
+                            .setContentText("please get back on route! use emergency call if you are not ok")
+                            .setStyle(
+                                NotificationCompat.BigTextStyle()
+                                    .bigText("dismiss the notification to let us know you're ok"))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                        with(NotificationManagerCompat.from(getApplicationContext())) {
+                            // notificationId is a unique int for each notification that you must define
+                            notify(12345, builder.build())
+                        }
+
+//                        val toast = Toast.makeText(
+//                            getApplicationContext(), "get on path!" +
+//                                    " if you are not safe, use emergency call", Toast.LENGTH_SHORT
+//                        ).apply {
+//
+//                            setGravity(0,10,10)
+//                            show()
+//                        }
+
+                    }
                 }
             }
             override fun onFinish() {
@@ -352,12 +379,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }.start()
 
     }
-    fun showToastMessage(text: String?, duration: Int) {
-        val toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        toast.show()
-        val handler = Handler()
-        handler.postDelayed(Runnable { toast.cancel() }, duration.toLong())
-    }
+
     // start map
     override fun onMapReady(googleMap: GoogleMap) {
         /**

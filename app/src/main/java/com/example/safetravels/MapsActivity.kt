@@ -171,7 +171,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         button.setOnClickListener {
-            Toast.makeText(this, "clicked me", Toast.LENGTH_SHORT).show()
+
             if (button.text == "End Route") {
                 checkOnRoute()
                 var timer = object : CountDownTimer(timer.toLong() * 1000 * 60, 1000) {
@@ -195,20 +195,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         no1 = false;
 
                         //send notification
-                        Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
-                        var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle("QUARTER")
-                            .setContentText("hi there, hope your walk is going well")
-                            .setStyle(
-                                NotificationCompat.BigTextStyle()
-                                    .bigText("dismiss the notification to let us know you're ok")
-                            )
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        if (button.text == "End Route") {
+                            Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
+                            var builder =
+                                NotificationCompat.Builder(getApplicationContext(), channelId)
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("QUARTER")
+                                    .setContentText("hi there, hope your walk is going well")
+                                    .setStyle(
+                                        NotificationCompat.BigTextStyle()
+                                            .bigText("dismiss the notification to let us know you're ok")
+                                    )
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-                        with(NotificationManagerCompat.from(getApplicationContext())) {
-                            // notificationId is a unique int for each notification that you must define
-                            notify(12345, builder.build())
+                            with(NotificationManagerCompat.from(getApplicationContext())) {
+                                // notificationId is a unique int for each notification that you must define
+                                notify(12345, builder.build())
+                            }
                         }
 
                         // start notification timer (get checkin_length from settings)
@@ -242,22 +245,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         no2 = false;
 
                         //send notification
-                        Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
-                        var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle("HALFWAY")
-                            .setContentText("hi there, hope your walk is going well you're halfway out of time")
-                            .setStyle(
-                                NotificationCompat.BigTextStyle()
-                                    .bigText("dismiss the notification to let us know you're ok")
-                            )
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        if (button.text == "End Route") {
+                            Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
+                            var builder =
+                                NotificationCompat.Builder(getApplicationContext(), channelId)
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("HALFWAY")
+                                    .setContentText("hi there, hope your walk is going well you're halfway out of time")
+                                    .setStyle(
+                                        NotificationCompat.BigTextStyle()
+                                            .bigText("dismiss the notification to let us know you're ok")
+                                    )
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-                        with(NotificationManagerCompat.from(getApplicationContext())) {
-                            // notificationId is a unique int for each notification that you must define
-                            notify(12345, builder.build())
+                            with(NotificationManagerCompat.from(getApplicationContext())) {
+                                // notificationId is a unique int for each notification that you must define
+                                notify(12345, builder.build())
+                            }
                         }
-
                         // start notification timer (get checkin_length from settings)
                         var timer =
                             object : CountDownTimer((60 * 1000 * timer / 4).toLong(), 1000) {
@@ -284,20 +289,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         no3 = false;
 
                         //send notification
-                        Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
-                        var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle("THIRD QUARTER")
-                            .setContentText("hi there, hope your walk is going well time's almost up")
-                            .setStyle(
-                                NotificationCompat.BigTextStyle()
-                                    .bigText("dismiss the notification to let us know you're ok")
-                            )
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        if (button.text == "End Route") {
+                            Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
+                            var builder =
+                                NotificationCompat.Builder(getApplicationContext(), channelId)
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("THIRD QUARTER")
+                                    .setContentText("hi there, hope your walk is going well time's almost up")
+                                    .setStyle(
+                                        NotificationCompat.BigTextStyle()
+                                            .bigText("dismiss the notification to let us know you're ok")
+                                    )
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-                        with(NotificationManagerCompat.from(getApplicationContext())) {
-                            // notificationId is a unique int for each notification that you must define
-                            notify(12345, builder.build())
+                            with(NotificationManagerCompat.from(getApplicationContext())) {
+                                // notificationId is a unique int for each notification that you must define
+                                notify(12345, builder.build())
+                            }
                         }
 
                         // start notification timer (get checkin_length from settings)
@@ -323,20 +331,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     override fun onFinish() {
 
                         //send notification
-                        Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
-                        var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle("FINISH")
-                            .setContentText("hi there, hope your walk went well and is over now")
-                            .setStyle(
-                                NotificationCompat.BigTextStyle()
-                                    .bigText("dismiss the notification to let us know you're ok")
-                            )
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        if (button.text == "End Route") {
+                            Toast.makeText(getApplicationContext(), "QUARTER", Toast.LENGTH_SHORT)
+                            var builder =
+                                NotificationCompat.Builder(getApplicationContext(), channelId)
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("FINISH")
+                                    .setContentText("hi there, hope your walk went well and is over now")
+                                    .setStyle(
+                                        NotificationCompat.BigTextStyle()
+                                            .bigText("dismiss the notification to let us know you're ok")
+                                    )
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-                        with(NotificationManagerCompat.from(getApplicationContext())) {
-                            // notificationId is a unique int for each notification that you must define
-                            notify(12345, builder.build())
+                            with(NotificationManagerCompat.from(getApplicationContext())) {
+                                // notificationId is a unique int for each notification that you must define
+                                notify(12345, builder.build())
+                            }
                         }
 
                         // start notification timer (get checkin_length from settings)
@@ -383,20 +394,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.d("HELP", "on path")
                 }else {
                         Log.d("HELP", "not on path")
-                        Toast.makeText(getApplicationContext(), "ROUTE DEVIATION", Toast.LENGTH_SHORT)
+                    val button: Button = findViewById(R.id.routeButton)
+                    if (button.text == "End Route") {
+                        Toast.makeText(
+                            getApplicationContext(),
+                            "ROUTE DEVIATION",
+                            Toast.LENGTH_SHORT
+                        )
                         var builder = NotificationCompat.Builder(getApplicationContext(), channelId)
                             .setSmallIcon(R.drawable.ic_launcher_foreground)
                             .setContentTitle("ROUTE DEVIATION")
                             .setContentText("please get back on route! use emergency call if you are not ok")
                             .setStyle(
                                 NotificationCompat.BigTextStyle()
-                                    .bigText("dismiss the notification to let us know you're ok"))
+                                    .bigText("dismiss the notification to let us know you're ok")
+                            )
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
                         with(NotificationManagerCompat.from(getApplicationContext())) {
                             // notificationId is a unique int for each notification that you must define
                             notify(12345, builder.build())
                         }
+                    }
 
                 }
             }

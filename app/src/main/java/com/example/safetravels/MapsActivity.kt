@@ -150,6 +150,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestPermission()
         }
     }
+    private fun emergencyProcedure(){
+        val number = "tel:911"
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
+        startActivity(intent)
+    }
 
     // start & display timer
     private fun startTimer() {
@@ -206,12 +211,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             //finalNotification()
                         }
                         if (millisUntilFinished < timer/4 * 2 * 60 * 1000) {
-                            //emergencyProcedure()
+                            emergencyProcedure()
                         }
 
                     }
                     override fun onFinish() {
-                        //emergencyProcedure()
+                        emergencyProcedure()
                     }
                 }
 
@@ -249,7 +254,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     }
                     override fun onFinish() {
-                        //emergencyProcedure()
+                        emergencyProcedure()
                     }
                 }
 
@@ -286,7 +291,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     }
                     override fun onFinish() {
-                        //emergencyProcedure()
+                        emergencyProcedure()
                     }
                 }
 
@@ -321,7 +326,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     }
                     override fun onFinish() {
-                        //emergencyProcedure()
+                        emergencyProcedure()
                     }
                 }
 

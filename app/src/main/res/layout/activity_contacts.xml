@@ -78,65 +78,62 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
         <!--title-->
-        <TextView
-            android:id="@+id/contacts_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="85dp"
-            android:text="@string/contacts"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!--subtitle-->
-        <TextView
-            android:id="@+id/editEmergency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:text="@string/edit_contacts_text"
-            android:textColor="@color/textcolour"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/contacts_text" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingStart="25dp"
             android:orientation="vertical"
-            tools:context="com.printallelementsofarraylist_android_examples.com.MainActivity" >
+            tools:context="com.printallelementsofarraylist_android_examples.com.MainActivity">
 
-            <TextView android:id="@+id/textView"
+            <TextView
+                android:id="@+id/contacts_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="168dp"
-                android:textSize="16sp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:gravity="center" />
+                android:layout_marginTop="85dp"
+                android:text="@string/contacts"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-
-            <!--input name, number-->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addContact"
-                android:layout_width="200dp"
-                android:layout_height="31dp"
-                android:layout_marginStart="25dp" />
-
-            <!--submit-->
-            <Button
-                android:id="@+id/subContact"
+            <TextView
+                android:id="@+id/editEmergency"
                 android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginStart="25dp"
-                android:text="Save" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/edit_contacts_text"
+                android:textColor="@color/textcolour"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/edName"
+                android:layout_width="250dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center|center_horizontal"
+                android:drawableRight="@drawable/person_add"
+                android:hint="Pick Contact"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/edNo"
+                android:layout_width="250dp"
+                android:layout_height="46dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center|center_horizontal"
+                android:hint="Name"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save_text" />
+
+            <ListView
+                android:id="@+id/contacts_list"
+                android:layout_width="350dp"
+                android:layout_height="260dp" />
 
         </LinearLayout>
 

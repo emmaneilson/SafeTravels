@@ -12,7 +12,8 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="send_alert">Send Alert</string>
     <string name="contacts">Contacts</string>
-    <string name="edit_contacts_text">Edit Emergency Contacts</string>
+    <string name="edit_contacts_text">Add Emergency Contacts</string>
+    <string name="view_contacts_text">View Emergency Contacts</string>
     <string name="add_contact_text">Add Contact</string>
     <string name="edit_notification_text">Edit Notification Settings</string>
     <string name="notifications_text">Notifications</string>
@@ -20,6 +21,7 @@
     <string name="header_logo_description">header logo</string>
     <string name="home_text">Home</string>
     <string name="map_text">Map</string>
+    <string name="save_text">Save</string>
     <string name="toggleButtonOn">Start Route</string>
     <string name="toggleButtonOff">End Route</string>
     <string name="emergencyCallButton">Emergency Call</string>

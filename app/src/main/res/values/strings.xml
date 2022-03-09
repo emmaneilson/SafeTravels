@@ -22,4 +22,7 @@
     <string name="home_text">Home</string>
     <string name="map_text">Map</string>
     <string name="save_text">Save</string>
+    <string name="toggleButtonOn">Start Route</string>
+    <string name="toggleButtonOff">End Route</string>
+    <string name="emergencyCallButton">Emergency Call</string>
 </resources>

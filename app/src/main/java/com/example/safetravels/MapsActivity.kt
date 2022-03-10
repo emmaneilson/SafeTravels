@@ -47,7 +47,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val markerPoints = ArrayList<Any>()
     private lateinit var binding: ActivityMapsBinding
-    private var userPos = LatLng(-200.0, 151.0)
+    public var userPos = LatLng(-200.0, 151.0)
     private var PERMISSION_ID = 1234
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var navView: NavigationView
@@ -60,7 +60,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //used in timer gets it from notification/settings page
     var timer = MyApplication.timer.toLong()
-
+    var dist = MyApplication.dist.toDouble()
     // auto create function
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,11 +71,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         drawerLayout = findViewById(R.id.drawerLayout)
         toggleRouteButton = findViewById(R.id.routeButton)
 
+        if(!checkPermissionText()){
+            requestPermissionText()
+        }
 
         // button to start/stop routes
         toggleRouteButton.setOnCheckedChangeListener{ _, isChecked ->
             isRouteStarted = !isChecked
             startTimer()
+
         }
         emergencyCallButton = findViewById(R.id.EmergencyCallButton)
         emergencyCallButton.setOnClickListener {
@@ -92,6 +96,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         getLastLocation()
 
+        val alertBtn: Button = findViewById(R.id.alert_button)
+
+        alertBtn.setOnClickListener{
+            Toast.makeText(this, "Alert Sent!", Toast.LENGTH_SHORT).show()
+        }
 
         //menu
         navView = findViewById(R.id.nav_menu)
@@ -151,6 +160,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestPermission()
         }
     }
+
+    private fun checkPermissionText():Boolean{
+        if(
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermissionText(){
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.SEND_SMS), PERMISSION_ID
+        )
+    }
+
     private fun emergencyProcedure(){
         val number = "tel:911"
         val intent = Intent(Intent.ACTION_DIAL, Uri.parse(number))
@@ -163,6 +190,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val channelId = "My_Channel_ID2"
         val button: Button = findViewById(R.id.routeButton)
+        val checkinButt: Button = findViewById(R.id.checkin)
 
         var no1: Boolean = true;
         var no2: Boolean = true;
@@ -173,6 +201,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         button.setOnClickListener {
 
             if (button.text == "End Route") {
+
                 checkOnRoute()
                 var timer = object : CountDownTimer(timer.toLong() * 1000 * 60, 1000) {
 
@@ -255,6 +284,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     .setStyle(
                                         NotificationCompat.BigTextStyle()
                                             .bigText("dismiss the notification to let us know you're ok")
+
                                     )
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
 
@@ -390,7 +420,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var timer = object : CountDownTimer(1*1000*60, 15000) {
 
             override fun onTick(millisUntilFinished: Long) {
-                if(PolyUtil.isLocationOnPath(userPos, polylines, true, 50.0)) {
+                if(PolyUtil.isLocationOnPath(userPos, polylines, true, dist)) {
                     Log.d("HELP", "on path")
                 }else {
                         Log.d("HELP", "not on path")

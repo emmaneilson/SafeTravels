@@ -192,10 +192,17 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/delete_text" />
+
         </LinearLayout>
 
         <Button
-            android:id="@+id/random_button"
+            android:id="@+id/alert_btn"
             android:layout_width="153dp"
             android:layout_height="56dp"
             android:layout_marginEnd="25dp"

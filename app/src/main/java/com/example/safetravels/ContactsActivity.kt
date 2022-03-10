@@ -14,10 +14,12 @@ import android.view.Gravity
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import java.util.jar.Manifest
 import kotlin.collections.ArrayList
 import android.content.SharedPreferences
-import java.util.*
+import android.telephony.SmsManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 class ContactsActivity : AppCompatActivity() {
 
@@ -29,11 +31,11 @@ class ContactsActivity : AppCompatActivity() {
     private val sharedPrefFile = "kotlinsharedpreference"
     private lateinit var listViewName: ListView
     private lateinit var listViewNum: ListView
-
     class PersonObj {
         var userName : String = ""
         var userNum : String = ""
     }
+    var maps = MapsActivity()
 
     private var contactList: MutableList<PersonObj> = ArrayList()
     private var nameList: MutableList<String> = ArrayList()
@@ -48,12 +50,25 @@ class ContactsActivity : AppCompatActivity() {
         val edName: EditText = findViewById(R.id.edName)
         val edNo: EditText = findViewById(R.id.edNo)
 
+        if(checkPref("names")){
+            nameList = getArrayList("names")
+        }
+        if(checkPref("numbers")){
+            numberList = getArrayList("numbers")
+        }
+
         listViewName = findViewById<ListView>(R.id.names_list)
         listViewNum = findViewById<ListView>(R.id.number_list)
 
+        val adapterName = ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
+        listViewName.adapter = adapterName
+
+        val adapterNum = ArrayAdapter(this, android.R.layout.simple_list_item_1, numberList)
+        listViewNum.adapter = adapterNum
+
         val saveBtn: Button = findViewById(R.id.saveBtn)
-        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile,
-            Context.MODE_PRIVATE)
+        val alertBtn: Button = findViewById(R.id.alert_btn)
+        val deleteBtn: Button = findViewById(R.id.deleteBtn)
 
         edName.setOnClickListener {
             if(checkPermission()) {
@@ -63,19 +78,31 @@ class ContactsActivity : AppCompatActivity() {
             }
         }
 
+        alertBtn.setOnClickListener{
+            sendAlert()
+        }
+
         saveBtn.setOnClickListener{
             if(edName.text != null && edNo.text != null){
                 val name = edName.text.toString()
                 val num = edNo.text.toString()
-                val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-
                 val contact = PersonObj()
+
                 contact.userName = name
                 contact.userNum = num
 
-                contactList.add(contact)
+                if(checkPref("names")){
+                    nameList = getArrayList("names")
+                }
+                if(checkPref("numbers")){
+                    numberList = getArrayList("numbers")
+                }
+
                 nameList.add(name)
                 numberList.add(num)
+
+                saveArrayList(nameList, "names")
+                saveArrayList(numberList, "numbers")
 
                 val adapterName = ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
                 listViewName.adapter = adapterName
@@ -83,12 +110,15 @@ class ContactsActivity : AppCompatActivity() {
                 val adapterNum = ArrayAdapter(this, android.R.layout.simple_list_item_1, numberList)
                 listViewNum.adapter = adapterNum
 
-//                editor.putStringSet("name", contactListSaved)
-//                editor.putString("number", num)
-//                editor.apply()
-//                editor.commit()
+                edName.setText("")
+                edNo.setText("")
             }
         }
+
+        deleteBtn.setOnClickListener{
+            deleteContacts()
+        }
+
 
         navView = findViewById(R.id.nav_menu)
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -138,11 +168,28 @@ class ContactsActivity : AppCompatActivity() {
         return false
     }
 
+    private fun checkPermissionText():Boolean{
+        if(
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
+        }
+        return false
+    }
+
     private fun requestPermission(){
 
         ActivityCompat.requestPermissions(
             this,
             arrayOf(android.Manifest.permission.READ_CONTACTS), PERMISSION_ID
+        )
+    }
+
+    private fun requestPermissionText(){
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.SEND_SMS), PERMISSION_ID
         )
     }
 
@@ -166,6 +213,42 @@ class ContactsActivity : AppCompatActivity() {
         startActivityForResult(i, 111)
     }
 
+    public fun sendAlert(){
+        if(checkPermissionText()){
+            for(i in 0 until numberList.size){
+                val location = maps.userPos
+                var obj = SmsManager.getDefault()
+                obj.sendTextMessage(numberList[i], null, "THIS IS AN ALERT FROM SAFETRAVELS SENT TO "+nameList[i]+". LAST LOCATION: "+location+"", null, null)
+            }
+            Toast.makeText(this, "Alert Sent!", Toast.LENGTH_SHORT).show()
+        }else{
+            requestPermissionText()
+
+        }
+    }
+
+    private fun deleteContacts(){
+        if(checkPref("names")){
+            nameList = getArrayList("names")
+        }
+        if(checkPref("numbers")){
+            numberList = getArrayList("numbers")
+        }
+
+        nameList.clear()
+        numberList.clear()
+
+        saveArrayList(nameList, "names")
+        saveArrayList(numberList, "numbers")
+
+        val adapterName = ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
+        listViewName.adapter = adapterName
+
+        val adapterNum = ArrayAdapter(this, android.R.layout.simple_list_item_1, numberList)
+        listViewNum.adapter = adapterNum
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val edName: EditText = findViewById(R.id.edName)
@@ -182,14 +265,27 @@ class ContactsActivity : AppCompatActivity() {
         }
     }
 
-//    fun saveContact(name: String, num: String){
-//        val contact = personObj()
-//        contact.userName = name
-//        contact.userNum = num
-//
-//        Log.d("name: ", contact.userName)
-//        Log.d("number: ", contact.userNum)
-//    }
+    fun saveArrayList(list: MutableList<String>, key: String?) {
+        val prefs: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = prefs.edit()
+        val gson = Gson()
+        val json: String = gson.toJson(list)
+        editor.putString(key, json)
+        editor.apply()
+    }
+
+    fun checkPref(key: String): Boolean{
+        val prefs: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        return prefs.contains(key)
+    }
+
+    fun getArrayList(key: String?): MutableList<String> {
+        val prefs: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json: String? = prefs.getString(key, null)
+        val type: Type = object : TypeToken<MutableList<String?>?>() {}.getType()
+        return gson.fromJson(json, type)
+    }
 
     private fun openHome() {
         val intent = Intent(this, MainActivity::class.java)

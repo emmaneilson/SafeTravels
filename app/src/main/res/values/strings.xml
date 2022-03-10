@@ -25,4 +25,5 @@
     <string name="toggleButtonOn">Start Route</string>
     <string name="toggleButtonOff">End Route</string>
     <string name="emergencyCallButton">Emergency Call</string>
+    <string name="delete_text">Remove Contacts</string>
 </resources>

@@ -27,7 +27,8 @@ class ContactsActivity : AppCompatActivity() {
     public lateinit var userName : String
     public var userNum : Int = 0
     private val sharedPrefFile = "kotlinsharedpreference"
-    private lateinit var listView: ListView
+    private lateinit var listViewName: ListView
+    private lateinit var listViewNum: ListView
 
     class PersonObj {
         var userName : String = ""
@@ -35,6 +36,8 @@ class ContactsActivity : AppCompatActivity() {
     }
 
     private var contactList: MutableList<PersonObj> = ArrayList()
+    private var nameList: MutableList<String> = ArrayList()
+    private var numberList: MutableList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +48,8 @@ class ContactsActivity : AppCompatActivity() {
         val edName: EditText = findViewById(R.id.edName)
         val edNo: EditText = findViewById(R.id.edNo)
 
-        listView = findViewById<ListView>(R.id.contacts_list)
+        listViewName = findViewById<ListView>(R.id.names_list)
+        listViewNum = findViewById<ListView>(R.id.number_list)
 
         val saveBtn: Button = findViewById(R.id.saveBtn)
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile,
@@ -59,34 +63,36 @@ class ContactsActivity : AppCompatActivity() {
             }
         }
 
-//        saveBtn.setOnClickListener{
-//            if(edName.text != null && edNo.text != null){
-//                val name = edName.text.toString()
-//                val num = edNo.text.toString()
-//                val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-//
-//                val contact = PersonObj()
-//                contact.userName = name
-//                contact.userNum = num
-//
-//                contactList.add(contact)
-//
-//                Log.d("list", contactList[0].toString())
-//
-//                val contactListSaved = contactList.toHashSet()
-//
-////                editor.putStringSet("name", contactListSaved)
-////                editor.putString("number", num)
-////                editor.apply()
-////                editor.commit()
-//            }
-//        }
+        saveBtn.setOnClickListener{
+            if(edName.text != null && edNo.text != null){
+                val name = edName.text.toString()
+                val num = edNo.text.toString()
+                val editor:SharedPreferences.Editor =  sharedPreferences.edit()
+
+                val contact = PersonObj()
+                contact.userName = name
+                contact.userNum = num
+
+                contactList.add(contact)
+                nameList.add(name)
+                numberList.add(num)
+
+                val adapterName = ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
+                listViewName.adapter = adapterName
+
+                val adapterNum = ArrayAdapter(this, android.R.layout.simple_list_item_1, numberList)
+                listViewNum.adapter = adapterNum
+
+//                editor.putStringSet("name", contactListSaved)
+//                editor.putString("number", num)
+//                editor.apply()
+//                editor.commit()
+            }
+        }
 
         navView = findViewById(R.id.nav_menu)
         drawerLayout = findViewById(R.id.drawerLayout)
 
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, contactList)
-//        listView.adapter = adapter
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

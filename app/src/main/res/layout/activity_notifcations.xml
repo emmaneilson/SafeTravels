@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".NotificationsActivity">
+
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,10 +31,10 @@
                     android:background="?attr/colorPrimary"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
                 <ImageView
                     android:id="@+id/header_logo"
@@ -109,55 +111,71 @@
             app:layout_constraintTop_toBottomOf="@+id/notifications" />
 
         <!--timer length-->
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/timer"
-            android:layout_width="90dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_notifications" />
-
-        <TextView
-            android:id="@+id/textViewTimer"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="60dp"
-            android:text="timer length"
-            app:layout_constraintStart_toEndOf="@+id/notification1"
-            app:layout_constraintTop_toBottomOf="@+id/edit_notifications" />
+            android:layout_height="200dp"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_notifications">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="0dp"
+                    android:text="timer length" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/timer"
+                    android:layout_width="90dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="0dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewDist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp"
+                    android:text="route deviation" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dist"
+                    android:layout_width="90dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <!--route deviation-->
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dist"
-            android:layout_width="90dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="132dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_notifications" />
-
-        <TextView
-            android:id="@+id/textViewDist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="140dp"
-            android:text="route deviation"
-            app:layout_constraintStart_toEndOf="@+id/notification1"
-            app:layout_constraintTop_toBottomOf="@+id/edit_notifications" />
 
         <!--submit-->
         <Button
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="216dp"
+            android:layout_marginStart="25dp"
             android:text="Save"
-            app:layout_constraintStart_toStartOf="@+id/notification1"
-            app:layout_constraintTop_toBottomOf="@+id/edit_notifications"
-            tools:layout_editor_absoluteX="27dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
